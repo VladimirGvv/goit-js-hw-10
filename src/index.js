@@ -11,14 +11,15 @@ const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
 const searchCountry = evt => {
-    const name = searchBox.value.trim();
+  const name = searchBox.value.trim();
+  if (name === '') return clearAll();
 
   fetchCountries(name)
     .then(data => {
       countriesData(data);
     })
     .catch(error => {
-      if (name !== '') {
+      if (error.message === '404') {
         Notiflix.Notify.failure('Oops, there is no country with that name');
       }
     });
@@ -27,30 +28,30 @@ const searchCountry = evt => {
     evt.preventDefault();
 };
 
+function clearAll() {
+  countryList.innerHTML = '';
+  countryInfo.innerHTML = '';
+}
+
 function countriesData(data) {
     if (data.length > 10) {
-         clearData(countryList);
-         clearData(countryInfo);
-    
+      clearAll()
         Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
     };
     if (data.length > 1 && data.length <= 10) {
-         clearData(countryList);
-         clearData(countryInfo);
-        
+         clearAll()
         return (countryList.innerHTML = data.map(item =>
             `   
             <li class = 'country'>
                     <img src = '${item.flags.svg}' />
-                    <p>${item.name}</p>
+                    <p>${item.name.official}</p>
                
                     </li>
             `
         ).join(''));
     };
     if (data.length === 1){
-        clearData(countryList);
-        clearData(countryInfo);
+        clearAll()
         
         return (countryInfo.innerHTML = data
             .map(
@@ -62,10 +63,11 @@ function countriesData(data) {
     
                         <div class = 'country-body'>
                         
-                            <h3>${item.name}</h3>
+                            <h3>${item.name.official}</h3>
                             <p><b>Capital: </b> ${item.capital}</p>
                             <p><b>Population: </b> ${item.population}</p>
-                            <p><b>Languages: </b> ${item.languages[0].name}</p>
+                            <p><b>Languages: </b> ${Object.values(
+            item.languages).join(', ')}</p>
                         </div> 
                  </div> 
                  `
@@ -76,10 +78,6 @@ function countriesData(data) {
 };
 
 searchBox.addEventListener('input', debounce(searchCountry, DEBOUNCE_DELAY));
-
-function clearData(output) {
-  output.innerHTML = '';
-}
 
 
 
