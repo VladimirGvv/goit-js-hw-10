@@ -42,9 +42,9 @@ function countriesData(data) {
          clearAll()
         return (countryList.innerHTML = data.map(item =>
             `   
-            <li class = 'country'>
-                    <img src = '${item.flags.svg}' />
-                    <p>${item.name.official}</p>
+            <li class = 'country_item'>
+                    <img src = '${item.flags.svg}' width = 80 height = 40/>
+                    <p class = 'country_text'>${item.name.official}</p>
                
                     </li>
             `
@@ -59,7 +59,7 @@ function countriesData(data) {
                 `  
                 <div class = 'country'>
                     
-                        <img src = '${item.flags.svg}' />
+                        <img src = '${item.flags.svg}' width = 300 height = 150/>
     
                         <div class = 'country-body'>
                         
