@@ -31,7 +31,7 @@ const searchCountry = evt => {
 function clearAll() {
   countryList.innerHTML = '';
   countryInfo.innerHTML = '';
-}
+};
 
 function countriesData(data) {
     if (data.length > 10) {
